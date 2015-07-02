@@ -38,17 +38,16 @@ CoffeeScript.load = (url, callback, options = {}, hold = false) ->
     new window.ActiveXObject('Microsoft.XMLHTTP')
   else
     new window.XMLHttpRequest()
-  xhr.open 'GET', url, true
+  xhr.open 'GET', url, false
   xhr.overrideMimeType 'text/plain' if 'overrideMimeType' of xhr
-  xhr.onreadystatechange = ->
-    if xhr.readyState is 4
-      if xhr.status in [0, 200]
-        param = [xhr.responseText, options]
-        CoffeeScript.run param... unless hold
-      else
-        throw new Error "Could not load #{url}"
-      callback param if callback
   xhr.send null
+  if xhr.readyState is 4
+    if xhr.status in [0, 200]
+      param = [xhr.responseText, options]
+      CoffeeScript.run param... unless hold
+    else
+      throw new Error "Could not load #{url}"
+    callback param if callback
 
 # Activate CoffeeScript in the browser by having it compile and evaluate
 # all script tags with a content-type of `text/coffeescript`.
@@ -83,8 +82,8 @@ runScripts = ->
 
   execute()
 
-# Listen for window load, both in decent browsers and in IE.
-if window.addEventListener
-  window.addEventListener 'DOMContentLoaded', runScripts, no
-else
-  window.attachEvent 'onload', runScripts
+# Execute loading right away. This will load all
+# files, defined above our script, and so imitate
+# (with synchronous ajax loading) the real script
+# tag behaviour.
+runScripts()

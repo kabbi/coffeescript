@@ -20,6 +20,12 @@
 
 CoffeeScript is a little language that compiles into JavaScript.
 
+## Changes in this fork
+
+- Synchronous `<script type="text/coffeescript">` tag loading, so that it better
+imitates the default browser behaviour for `text/javascript` tags. (Yes, I know
+this is deprecated now, but I see no other way to do that. PRs are welcome so (: )
+
 ## Installation
 
 If you have the node package manager, npm, installed:
